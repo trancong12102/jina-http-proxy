@@ -23,8 +23,6 @@ services:
       - POSTGRES_DB=jina_proxy
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
     networks:
       - jina-network
     restart: unless-stopped
