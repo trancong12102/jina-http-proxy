@@ -1,0 +1,37 @@
+services:
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5555:5555' # Proxy port
+      - '5556:5556' # API port
+    environment:
+      - GOOSE_DBSTRING=postgres://postgres:postgres@db:5432/jina_proxy?sslmode=disable
+      - GOOSE_MIGRATION_DIR=/app/migrations
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - jina-network
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=jina_proxy
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - jina-network
+    restart: unless-stopped
+
+networks:
+  jina-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

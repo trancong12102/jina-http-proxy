@@ -1,0 +1,7 @@
+version: '3'
+
+tasks:
+  generate-env-example:
+    cmds:
+      - echo "Generating .env file"
+      - sed 's/=.*/=/' .env > .env.example
